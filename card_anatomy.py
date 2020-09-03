@@ -24,12 +24,19 @@ class Card:
         return ''.join([str(random.randint(0, 9)) for _ in range(4)])
 
     def make_card_number(self):
-        def last_digit():
-            return '0'
+        def last_digit(card_number):
+            numbers = [int(x) for x in card_number]
+            for i in range(len(numbers)):
+                if i % 2 == 0:
+                    numbers[i] *= 2
+                if numbers[i] > 9:
+                    numbers[i] -= 9
+            return str((10 - (sum(numbers) % 10)) % 10)
 
         account_number = str(next(Card.account_number_generator))
         account_number = '0' * (Card.account_number_len - len(account_number)) + account_number
-        return Card.iin + account_number + last_digit()
+        card_number = Card.iin + account_number
+        return card_number + last_digit(card_number)
 
     @classmethod
     def find_card(cls, card_number, pin):
